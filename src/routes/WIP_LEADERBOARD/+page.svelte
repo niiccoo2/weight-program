@@ -55,6 +55,14 @@
 		return newList;
 	}
 
+	function calcTotal(weights: Weight[]) {
+		let sum: number = 0;
+		for (let weight of weights) {
+			sum += weight.weight;
+		}
+		console.log(sum);
+	}
+
 	onMount(() => {
 		const sendButton = document.getElementById('send-button');
 		const readButton = document.getElementById('read-button');
