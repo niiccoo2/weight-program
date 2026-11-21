@@ -4,8 +4,8 @@ WORKDIR /app
 # Install build dependencies required to compile better-sqlite3
 RUN apk add --no-cache python3 make g++
 
-# Copy package files and Svelte config first so svelte-kit sync succeeds during npm ci
-COPY package*.json svelte.config.js ./
+# Copy package files first for layer caching
+COPY package*.json ./
 RUN npm ci
 
 # Copy the rest of the application and build
