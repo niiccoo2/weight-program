@@ -18,6 +18,9 @@ export default defineConfig({
 			adapter: adapter()
 		})
 	],
+	ssr: {
+		external: ['better-sqlite3']
+	},
 	server: {
 		https: hasCerts
 			? {

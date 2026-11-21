@@ -1,14 +1,11 @@
 FROM node:22-alpine AS builder
 WORKDIR /app
 
-# Install build dependencies required to compile better-sqlite3
 RUN apk add --no-cache python3 make g++
 
-# Copy package files first for layer caching
 COPY package*.json ./
 RUN npm ci
 
-# Copy the rest of the application and build
 COPY . .
 RUN npm run build
 RUN npm prune --omit=dev
@@ -16,7 +13,6 @@ RUN npm prune --omit=dev
 FROM node:22-alpine
 WORKDIR /app
 
-# Copy built output, production dependencies, and package.json
 COPY --from=builder /app/build build/
 COPY --from=builder /app/node_modules node_modules/
 COPY package.json .
