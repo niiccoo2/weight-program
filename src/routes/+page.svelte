@@ -4,6 +4,7 @@
 	let nameValue = $state('');
 	let weightValue = $state(0);
 	let weight = $state(0);
+	let weirdScale = $state(false);
 
 	interface Weight {
 		name: string;
@@ -85,16 +86,16 @@
 		}
 
 		function parseWeightString(weightString: string): number {
-			const commaCheck = weightString.split(',').length - 1;
+			// const commaCheck = weightString.split(',').length - 1;
 
-			if (commaCheck === 3) {
-				// If we have a proper string
+			// if (commaCheck === 3) {
+			// If we have a proper string
 
-				return Number(weightString.split(',')[0]);
-			} else {
-				console.log("Didn't get 3 commas, returning 0.");
-				return 0;
-			}
+			return Number(weightString.split(',')[0]);
+			// } else {
+			// console.log("Didn't get 3 commas, returning 0.");
+			// return 0;
+			// }
 
 			return 0;
 		}
@@ -127,6 +128,8 @@
 			openButton.addEventListener('click', async () => {
 				port = await openPort();
 
+				// if (weirdScale) sendWeightCommand('x');
+
 				while (true) {
 					weight = await readWeight(port);
 					console.log(weight);
@@ -153,5 +156,7 @@
 <button id="send-button">SEND WEIGHT</button>
 <button id="open-button">OPEN SCALE</button>
 <button id="tare-button">TAR SCALE</button>
+
+<p>Do you have a weird scale? <input bind:checked={weirdScale} type="checkbox" /></p>
 
 <p>WEIGHT: {weight} lbs</p>
