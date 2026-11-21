@@ -80,6 +80,7 @@
 				console.log('RAW', rawWeights);
 				leaderboard = cleanWeights(rawWeights);
 				console.log('LEADERBOARD', leaderboard);
+				calcTotal(rawWeights);
 			});
 	});
 </script>
