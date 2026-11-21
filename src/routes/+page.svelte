@@ -2,6 +2,8 @@
 	/// <reference types="w3c-web-serial" />
 	import { onMount } from 'svelte';
 
+	let weight = $state(0);
+
 	function delay(ms: number) {
 		return new Promise((resolve) => setTimeout(resolve, ms));
 	}
@@ -13,7 +15,7 @@
 		async function openPort(baudRate: number = 9600) {
 			const newPort = await navigator.serial.requestPort();
 			await newPort.open({ baudRate: baudRate });
-			console.log('Returning new port');
+			console.debug('Returning new port');
 			return newPort;
 		}
 
@@ -27,11 +29,13 @@
 							// |reader| has been canceled.
 							break;
 						}
-						console.log(value);
 						const string = new TextDecoder().decode(value);
-						console.log(string);
+
+						console.debug(value);
+						console.debug(string);
+
 						reader.releaseLock();
-						return value;
+						return string;
 					}
 				} catch (error) {
 					// Handle |error|…
@@ -48,27 +52,49 @@
 			writer.releaseLock();
 		}
 
+		function parseWeightString(weightString: string): number {
+			const commaCheck = weightString.split(',').length - 1;
+
+			if (commaCheck === 3) {
+				// If we have a proper string
+
+				return Number(weightString.split(',')[0]);
+			} else {
+				console.log("Didn't get 3 commas, returning 0.");
+				return 0;
+			}
+
+			return 0;
+		}
+
 		async function readWeight(port) {
-			while (true) {
-				// first send the command
+			// first send the command
+			await sendWeightCommand(port);
 
-				await sendWeightCommand(port);
+			// then read the response
+			const response = await readData(port);
 
-				// then read the response
-
-				let response = await readData(port);
-
-				await delay(1000);
+			if (response) {
+				return parseWeightString(response);
+			} else {
+				console.error("Didn't get a response, returning 0.");
+				return 0;
 			}
 		}
 
 		if (button) {
 			button.addEventListener('click', async () => {
 				port = await openPort();
-				readWeight(port);
+
+				while (true) {
+					weight = await readWeight(port);
+					console.log(weight);
+					await delay(800);
+				}
 			});
 		}
 	});
 </script>
 
 <button id="main-button">CLICK ME</button>
+<p>{weight}</p>
