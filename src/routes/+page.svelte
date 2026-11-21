@@ -1,15 +1,47 @@
 <script lang="ts">
-	/// <reference types="w3c-web-serial" />
 	import { onMount } from 'svelte';
-
+	let weightTextValue = $state('');
+	let nameValue = $state('');
+	let weightValue = $state(0);
 	let weight = $state(0);
 
-	function delay(ms: number) {
-		return new Promise((resolve) => setTimeout(resolve, ms));
+	interface Weight {
+		name: string;
+		weight: number;
+		time: number;
+		scale_id: string;
+		auth_id: string;
+	}
+
+	async function saveWeight() {
+		const d = new Date();
+		const response = await fetch('/api/save', {
+			method: 'POST',
+			body: JSON.stringify({
+				name: nameValue,
+				weight: weight,
+				time: d.getTime(),
+				scale_id: 0,
+				auth_id: 0
+			}),
+			headers: {
+				'content-type': 'application/json'
+			}
+		});
+
+		console.log(await response.json());
+		// weightValue = await response.json();
 	}
 
 	onMount(() => {
-		const button = document.getElementById('main-button');
+		const sendButton = document.getElementById('send-button');
+
+		if (sendButton)
+			sendButton.addEventListener('click', async () => {
+				saveWeight();
+			});
+		const openButton = document.getElementById('open-button');
+		const tareButton = document.getElementById('tare-button');
 		let port = null;
 
 		async function openPort(baudRate: number = 9600) {
@@ -45,10 +77,10 @@
 			}
 		}
 
-		async function sendWeightCommand(port) {
+		async function sendWeightCommand(port, cmd: string = 'W') {
 			const encoder = new TextEncoder();
 			const writer = port.writable.getWriter();
-			await writer.write(encoder.encode('W'));
+			await writer.write(encoder.encode(cmd));
 			writer.releaseLock();
 		}
 
@@ -67,6 +99,15 @@
 			return 0;
 		}
 
+		async function tareScale(port) {
+			await sendWeightCommand('x');
+			await delay(1000);
+			await sendWeightCommand('1');
+			await delay(5000);
+			await sendWeightCommand('x');
+			await delay(1000);
+		}
+
 		async function readWeight(port) {
 			// first send the command
 			await sendWeightCommand(port);
@@ -82,8 +123,8 @@
 			}
 		}
 
-		if (button) {
-			button.addEventListener('click', async () => {
+		if (openButton) {
+			openButton.addEventListener('click', async () => {
 				port = await openPort();
 
 				while (true) {
@@ -93,8 +134,24 @@
 				}
 			});
 		}
+
+		if (tareButton) {
+			tareButton.addEventListener('click', async () => {
+				port = await openPort();
+				tareScale(port);
+			});
+		}
 	});
+
+	function delay(ms: number) {
+		return new Promise((resolve) => setTimeout(resolve, ms));
+	}
 </script>
 
-<button id="main-button">CLICK ME</button>
-<p>{weight}</p>
+<input bind:value={nameValue} />
+
+<button id="send-button">SEND WEIGHT</button>
+<button id="open-button">OPEN SCALE</button>
+<button id="tare-button">TAR SCALE</button>
+
+<p>WEIGHT: {weight} lbs</p>
