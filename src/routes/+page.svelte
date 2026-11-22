@@ -155,7 +155,7 @@
 
 <button id="send-button">SEND WEIGHT</button>
 <button id="open-button">OPEN SCALE</button>
-<button id="tare-button">TAR SCALE</button>
+<button id="tare-button">TARE SCALE</button>
 
 <p>Do you have a weird scale? <input bind:checked={weirdScale} type="checkbox" /></p>
 

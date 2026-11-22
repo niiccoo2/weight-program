@@ -2,7 +2,7 @@ Program that weighs food for food drives. Uses webserial to connect to a USB sca
 
 ![Image of the UI](image.png)
 
-Got to an okay MVP, the code that is there is pretty robust, other than the scale checkbox.
+Got to an okay MVP, the code that is there is pretty robust, other than the scale checkbox. Weird scale checkbox uses a slightly different interface over the serial port, as some scales that were used at the food drive were weird, hence the naming.
 
 Things that need to be added:
 
