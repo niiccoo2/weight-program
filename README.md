@@ -1,4 +1,4 @@
-Program that weighs food for food drives. Uses webserial to connect to a USB scale.
+Program that weighs food for food drives. Uses webserial to connect to a USB scale. Version 5 of the software used for [Troop 30 Watertown's](https://troop30bsa.com/welcome-to-troop-30/troop-30-news/) annual food drive. Tested with 3 tons of food this year!
 
 ![Image of the UI](image.png)
 
