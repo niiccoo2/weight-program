@@ -1,4 +1,6 @@
-Program that weighs food for food drives.
+Program that weighs food for food drives. Uses webserial to connect to a USB scale.
+
+![Image of the UI](image.png)
 
 Got to an okay MVP, the code that is there is pretty robust, other than the scale checkbox.
 
@@ -16,3 +18,9 @@ Things that need to be added:
 ### Dev notes
 
 - Make sure that the user has permissions for the serial port on Linux
+
+### Installation
+
+1. Clone repo
+2. Install dependencies using `npm install`
+3. Run dev server using `npm run dev`
