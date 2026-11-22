@@ -1,11 +1,17 @@
 Program that weighs food for food drives.
 
-Features / things to figure out:
+Got to an okay MVP, the code that is there is pretty robust, other than the scale checkbox.
 
-- How to log in
-- Web serial
-- Download all data
-- Clear instance
+Things that need to be added:
+
+- Auth
+- Leaderboard
+- Export
+- Clear
+- Roster option
+- Set up on scout domain
+- Tare scale (Function is made, but not sure how to have it stop the main reading function)
+  - Now that I think about it, what if in the normal reading function we check if a switch has been flipped (flip via button) then if it is, tare scale, then go back to reading and flip the switch off again.
 
 ### Dev notes
 
